@@ -94,7 +94,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	}
 
 	l = l.WithField("dst", destAddr)
-	l.Debug("dialing")
+	l.Info("dialing")
 
 	d := net.Dialer{
 		Control: func(network, address string, c syscall.RawConn) error {
@@ -116,7 +116,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 		_ = serverConn.Close()
 	}()
 
-	l.Debug("serving")
+	l.Info("serving")
 
 	go func() {
 		_, err := io.Copy(serverConn, conn)
