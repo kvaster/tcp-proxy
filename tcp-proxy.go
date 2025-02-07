@@ -11,6 +11,7 @@ import (
 )
 
 var listenAddr = flag.String("listen.addr", ":8883", "listen address and port")
+var mark = flag.Int("mark", 0, "mark flow")
 
 func main() {
 	flag.Parse()
@@ -18,7 +19,7 @@ func main() {
 
 	log.Info("starting tcp-proxy")
 
-	s := proxy.New(*listenAddr)
+	s := proxy.New(*listenAddr, *mark)
 
 	if err := s.Start(); err != nil {
 		log.WithError(err).Error("error starting tcp-proxy")

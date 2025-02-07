@@ -12,13 +12,15 @@ const SoOriginalDst = 80
 
 type Server struct {
 	listenAddr string
+	mark       int
 
 	connListener net.Listener
 }
 
-func New(listenAddr string) *Server {
+func New(listenAddr string, mark int) *Server {
 	return &Server{
 		listenAddr: listenAddr,
+		mark:       mark,
 	}
 }
 
@@ -97,7 +99,7 @@ func (s *Server) handleConnection(conn net.Conn) {
 	d := net.Dialer{
 		Control: func(network, address string, c syscall.RawConn) error {
 			return c.Control(func(fd uintptr) {
-				err := syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_MARK, 0x01)
+				err := syscall.SetsockoptInt(int(fd), syscall.SOL_SOCKET, syscall.SO_MARK, s.mark)
 				if err != nil {
 					l.WithError(err).Error("failed to set socket mark")
 				}
